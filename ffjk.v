@@ -28,12 +28,16 @@ module latch_rs(s, r, clk, pr, clr, q, qn);
     nand outn(qn, r_intern, not_clr, q);
 endmodule
 
-module ffjk(j, k, clk, pr, clr, q, qn);
-    input j, k, clk, pr, clr;
+module ffd(d, clk, pr, clr, q, qn);
+    input d clk, pr, clr;
     output q, qn;
-    wire not_clk, q_intern, qn_intern;
+    wire j, k, not_d, not_clk, q_intern, qn_intern;
 
     not clkn(not_clk, clk);
+    not dn(not_d, d);
+
+    assign j = d;
+    assign k = not_d;
 
     latch_jk mestre(
         .j(j),
