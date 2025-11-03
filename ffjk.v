@@ -29,7 +29,7 @@ module latch_rs(s, r, clk, pr, clr, q, qn);
 endmodule
 
 module ffd(d, clk, pr, clr, q, qn);
-    input d clk, pr, clr;
+    input d, clk, pr, clr;
     output q, qn;
     wire j, k, not_d, not_clk, q_intern, qn_intern;
 
