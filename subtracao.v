@@ -11,7 +11,7 @@ module h_sub(in1, in2, out, borrow);
     
 endmodule
 
-module sub(in1, in2, bin, out, bout);
+module f_sub(in1, in2, bin, out, bout);
     input in1, in2, bin;
     output out, bout;
     wire not_in1, not_in1bin, not_in1in2, in2bin;
@@ -24,7 +24,13 @@ module sub(in1, in2, bin, out, bout);
     xor(out, in1, in2, bin);
     or(bout, not_in1bin, not_in1in2, in2bin);
 
+endmodule
 
+module subtracao(in1, in2, out);
+    input [0:7]in1, in2;
+    output [0:8]out;
+
+    
 endmodule
 
 /*
