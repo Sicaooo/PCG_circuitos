@@ -29,8 +29,17 @@ endmodule
 module subtracao(in1, in2, out);
     input [0:7]in1, in2;
     output [0:8]out;
+    wire [0:6]borrows;
 
-    
+    h_sub hs(in1[7], in2[7], out[8], borrows[6]);
+
+    generate
+        genvar i;
+        for (i = 6; i > 0; i = i - 1) f_sub fs(in1[i], in2[i], borrows[i], out[i + 1], borrows[i - 1]);
+    endgenerate
+
+    f_sub fs(in1[0], in2[0], borrows[0], out[1], out[0]);
+
 endmodule
 
 /*
