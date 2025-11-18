@@ -7,7 +7,7 @@ module h_adder(in1, in2, out, carry);
 
 endmodule
 
-module adder(in1, in2, carryin, out, carryout);
+module f_adder(in1, in2, carryin, out, carryout);
     input in1, in2, carryin;
     output out, carryout;
     wire in1in2, in1cin, in2cin;
@@ -18,6 +18,22 @@ module adder(in1, in2, carryin, out, carryout);
 
     xor(out, in1, in2, carryin);
     or(carryout, in1in2, in1cin, in2cin);
+
+endmodule
+
+module adicao(in1, in2, out);
+    input [0:7] in1, in2;
+    output [0:8] out;
+    wire [0:6] carrys;
+
+    h_adder ha(in1[7], in2[7], out[8], carrys[6]);
+
+    generate
+        genvar i;
+        for (i = 6; i > 0; i = i - 1) f_adder fa(in1[i], in2[i], carrys[i], out[i + 1], carrys[i - 1]);
+    endgenerate
+
+    f_adder fa7(in1[0], in2[0], carrys[0], out[1], out[0]);
 
 endmodule
 
