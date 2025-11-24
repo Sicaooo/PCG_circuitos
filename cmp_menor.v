@@ -1,7 +1,8 @@
 module cmp_menor(in1, in2, out);
     input [0:7]in1, in2;
-    output out;
+    output [0:8]out;
 
+    wire result;
     wire [0:6]ig;
     wire [0:7]m;
     wire [0:7]n_in1;
@@ -45,6 +46,8 @@ module cmp_menor(in1, in2, out);
     and(ver[6], ig[0], ig[1], ig[2], ig[3], ig[4], ig[5], m[6]);
     and(ver[7], ig[0], ig[1], ig[2], ig[3], ig[4], ig[5], ig[6], m[7]);
 
-    or(out, m[0], ver[1], ver[2], ver[3], ver[4], ver[5], ver[6], ver[7]);
+    or(result, m[0], ver[1], ver[2], ver[3], ver[4], ver[5], ver[6], ver[7]);
+
+    assign out = {8'b0, result};
 
 endmodule
