@@ -12,3 +12,5 @@ nome = input("Insira o nome do arquivo: ")
 subprocess.run(["iverilog", "-o", f"{nome}.vvp", f"{nome}_tb.v"])
 subprocess.run(["vvp", f"{nome}.vvp"])
 subprocess.run(["gtkwave", f"{nome}_tb.vcd"])
+
+#C:\Users\guimo\Documents\Programacao\PCG_circuitos
