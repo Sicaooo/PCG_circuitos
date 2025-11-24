@@ -1,59 +1,56 @@
-module latch_jk(j, k, clk, pr, clr, s_esc, s_escn, q, qn);
-    input j, k, clk, pr, clr, s_esc, s_escn;
-    output q, qn;
-    wire s, r;
+`include "registrador.v"
+`include "decoder.v"
+`include "buffer.v"
+`include "adicao.v"
+`include "subtracao.v"
+`include "multiplicacao.v"
+`include "cmp_igual.v"
+`include "cmp_maior.v"
+`include "cmp_menor.v"
+`include "cmp_e.v"
+`include "cmp_ou.v"
 
-    not prn(not_pr, pr);
-    not clrn(not_clr, clr);
+module ULA(a, b, sel_in, out);
+    input [0:2]sel_in;
+    input [0:7]a, b;
 
-    nand jqn(s, j, s_escn, clk);
-    nand kq(r, k, s_esc, clk);
+    output [0:8]out;
 
-    nand out(q, s, not_pr, qn);
-    nand outn(qn, r, not_clr, q);
-endmodule
+    wire [0:8]soma_out;
+    wire [0:8]sub_out;
+    wire [0:8]mult_out;
+    wire [0:8]cmpi_out;
+    wire [0:8]cmpma_out;
+    wire [0:8]cmpme_out;
+    wire [0:8]cmpe_out;
+    wire [0:8]cmpou_out;
 
-module latch_rs(s, r, clk, pr, clr, q, qn);
-    input s, r, clk, pr, clr;
-    output q, qn;
-    wire s_intern, r_intern;
+    wire [0:7]sel_out;
 
-    not prn(not_pr, pr);
-    not clrn(not_clr, clr);
+    decoder dec(sel_in, sel_out);
 
-    nand jqn(s_intern, s, clk);
-    nand kq(r_intern, r, clk);
+    adicao ad(a, b, soma_out);
+    buffer bf1(soma_out, out, sel_out[0]);
 
-    nand out(q, s_intern, not_pr, qn);
-    nand outn(qn, r_intern, not_clr, q);
-endmodule
+    subtracao sub(a, b, sub_out);
+    buffer bf2(sub_out, out, sel_out[1]);
 
-module ffjk(j, k, clk, pr, clr, q, qn);
-    input j, k, clk, pr, clr;
-    output q, qn;
-    wire not_clk, q_intern, qn_intern;
+    multiplicacao mult(a, b, mult_out);
+    buffer bf3(mult_out, out, sel_out[2]);
 
-    not clkn(not_clk, clk);
+    cmp_igual cmpi(a, b, cmpi_out);
+    buffer bf4(cmpi_out, out, sel_out[3]);
 
-    latch_jk mestre(
-        .j(j),
-        .k(k),
-        .clk(clk),
-        .pr(pr),
-        .clr(clr),
-        .s_esc(q),
-        .s_escn(qn),
-        .q(q_intern),
-        .qn(qn_intern)
-    );
+    cmp_maior cmpma(a, b, cmpma_out);
+    buffer bf5(cmpma_out, out, sel_out[4]);
 
-    latch_rs escravo(
-        .s(q_intern),
-        .r(qn_intern),
-        .clk(not_clk),
-        .pr(pr),
-        .clr(clr),
-        .q(q),
-        .qn(qn)
-    );
+    cmp_menor cmpme(a, b, cmpme_out);
+    buffer bf6(cmpme_out, out, sel_out[5]);
+
+    cmp_e cmpe(a, b, cmpe_out);
+    buffer bf7(cmpe_out, out, sel_out[6]);
+
+    cmp_ou cmpou(a, b, cmpou_out);
+    buffer bf8(cmpou_out, out, sel_out[7]);
+
 endmodule
